@@ -10,7 +10,7 @@ import (
 
 func TestTCP(t *testing.T) {
 	mem := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.LITTLE_LOWER, parser.INT32ARR, 1)
-	tcp := NewTCP(mem)
+	tcp := NewTCP(nil, mem)
 	if err := tcp.Connect(); err != nil {
 		t.Error(err)
 	} else {

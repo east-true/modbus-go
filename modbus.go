@@ -13,20 +13,24 @@ type Modbus struct {
 }
 
 // TODO : client fields editing
-func NewRTU(mems ...memory.MemDelegate) *Modbus {
-	client := client.NewRTU()
-	client.SetHandler()
+func NewRTU(rtu *client.RTU, mems ...memory.MemDelegate) *Modbus {
+	if rtu == nil {
+		rtu = client.NewRTU()
+	}
+	rtu.SetHandler()
 	return &Modbus{
-		c:   client,
+		c:   rtu,
 		fns: mems,
 	}
 }
 
-func NewTCP(mems ...memory.MemDelegate) *Modbus {
-	client := client.NewTCP()
-	client.SetHandler()
+func NewTCP(tcp *client.TCP, mems ...memory.MemDelegate) *Modbus {
+	if tcp == nil {
+		tcp = client.NewTCP()
+	}
+	tcp.SetHandler()
 	return &Modbus{
-		c:   client,
+		c:   tcp,
 		fns: mems,
 	}
 }
