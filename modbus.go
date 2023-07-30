@@ -2,34 +2,31 @@ package modbus
 
 import (
 	"fmt"
-	"modbus-go/client"
-	"modbus-go/memory"
 
-	"github.com/yuin/goldmark/parser"
+	"github.com/east-true/modbus-go/client"
+	"github.com/east-true/modbus-go/memory"
 )
 
 type Modbus struct {
-	c      client.Client
-	fns    []memory.CallFunc
-	parser *memory.MBP
+	c   client.Client
+	fns []memory.MemDelegate
 }
 
-// TODO
-func NewRTU(byteOrder string, mems []memory.Mem) *Modbus {
-	client := client.NewRTU()
-	client.SetHandler()
-	return &Modbus{
-		c:      client,
-		parser: parser.NewParser(),
-	}
-}
-
-func NewTCP(byteOrder string, mems []memory.Mem) *Modbus {
+func NewRTU(byteOrder string, dels []memory.MemDelegate) *Modbus {
 	client := client.NewTCP()
 	client.SetHandler()
 	return &Modbus{
-		c:      client,
-		parser: parser.NewParser(),
+		c:   client,
+		fns: dels,
+	}
+}
+
+func NewTCP(byteOrder string, dels []memory.MemDelegate) *Modbus {
+	client := client.NewTCP()
+	client.SetHandler()
+	return &Modbus{
+		c:   client,
+		fns: dels,
 	}
 }
 
@@ -38,12 +35,14 @@ func NewTCP(byteOrder string, mems []memory.Mem) *Modbus {
 // ..............................하
 func (mb *Modbus) Read() {
 	for i := range mb.fns {
-		if b, err := mb.fns[i].Read(mb.c.GetClient()); err != nil {
+		if data, err := mb.fns[i].Read(mb.c.GetClient()); err != nil {
 			fmt.Println(err)
 			continue
 		} else {
 			// TODO
-			fmt.Println(string(b))
+			for i := range data {
+				fmt.Println(data[i])
+			}
 		}
 	}
 }
