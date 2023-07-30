@@ -1,5 +1,5 @@
-github.com/east-true/goutil v0.0.0-20230728064620-cac003791a24 h1:UGuVmYfiy2elO4Ir7YCpHL6MbcQNIQlfz423QZysUkk=
-github.com/east-true/goutil v0.0.0-20230728064620-cac003791a24/go.mod h1:V6AZxeMno/fvE9k0tJojN0Gq8N4/mZjvlCVpfkg9aCg=
+github.com/east-true/goutil v0.0.1 h1:91quN6784ixP6rBTFJKQpQJDHfF0woH9kS/z5EuhKzY=
+github.com/east-true/goutil v0.0.1/go.mod h1:V6AZxeMno/fvE9k0tJojN0Gq8N4/mZjvlCVpfkg9aCg=
 github.com/goburrow/modbus v0.1.0 h1:DejRZY73nEM6+bt5JSP6IsFolJ9dVcqxsYbpLbeW/ro=
 github.com/goburrow/modbus v0.1.0/go.mod h1:Kx552D5rLIS8E7TyUwQ/UdHEqvX5T8tyiGBTlzMcZBg=
 github.com/goburrow/serial v0.1.0 h1:v2T1SQa/dlUqQiYIT8+Cu7YolfqAi3K96UmhwYyuSrA=
