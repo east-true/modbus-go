@@ -29,7 +29,7 @@ func NewRTU() *RTU {
 		SlaveID:  1,
 		Address:  "/dev",
 		Timeout:  5,
-		BaudRate: 1,
+		BaudRate: 9600,
 		DataBits: 8,
 		Parity:   "N",
 		StopBits: 1,
