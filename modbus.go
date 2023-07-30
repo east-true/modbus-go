@@ -14,7 +14,7 @@ type Modbus struct {
 
 // TODO : client fields editing
 func NewRTU(mems ...memory.MemDelegate) *Modbus {
-	client := client.NewTCP()
+	client := client.NewRTU()
 	client.SetHandler()
 	return &Modbus{
 		c:   client,
