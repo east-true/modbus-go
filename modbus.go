@@ -12,6 +12,7 @@ type Modbus struct {
 	fns []memory.MemDelegate
 }
 
+// TODO : client fields editing
 func NewRTU(mems ...memory.MemDelegate) *Modbus {
 	client := client.NewTCP()
 	client.SetHandler()
