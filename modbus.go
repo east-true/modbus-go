@@ -52,9 +52,9 @@ func (mb *Modbus) Read() {
 	}
 }
 
-func (mb *Modbus) Write() {
+func (mb *Modbus) Write(value ...uint16) {
 	for i := range mb.fns {
-		if res, err := mb.fns[i].Write(mb.c.GetClient()); err != nil {
+		if res, err := mb.fns[i].Write(mb.c.GetClient(), value[i]); err != nil {
 			fmt.Println(err)
 			continue
 		} else {
