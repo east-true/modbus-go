@@ -5,6 +5,7 @@ package memory
 
 import (
 	"errors"
+	"time"
 
 	"github.com/east-true/goutil/parser"
 	"github.com/goburrow/modbus"
@@ -23,8 +24,14 @@ const (
 )
 
 type MemDelegate interface {
-	Read(c modbus.Client) ([]interface{}, error)
+	Read(c modbus.Client) (*MemReadData, error)
 	Write(c modbus.Client, value uint16) ([]byte, error)
+}
+
+type MemReadData struct {
+	Addr  uint16
+	Time  time.Time
+	Value []interface{}
 }
 
 type Mem struct {
@@ -71,8 +78,13 @@ func New(funcCode uint8, address uint16, order string, dataType uint8, cnt uint1
 	return mem
 }
 
-func (mem *Mem) Read(c modbus.Client) ([]interface{}, error) {
-	return mem.read(c)
+func (mem *Mem) Read(c modbus.Client) (*MemReadData, error) {
+	value, err := mem.read(c)
+	return &MemReadData{
+		Addr:  mem.address,
+		Time:  time.Now(),
+		Value: value,
+	}, err
 }
 
 func (mem *Mem) Write(c modbus.Client, value uint16) ([]byte, error) {
