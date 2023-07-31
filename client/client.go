@@ -18,7 +18,7 @@ type Client interface {
 type RTU struct {
 	SlaveID  byte
 	Address  string
-	Timeout  time.Duration
+	Timeout  time.Duration // nano sec
 	BaudRate int
 	DataBits int
 	Parity   string
@@ -31,7 +31,7 @@ func NewRTU() *RTU {
 	return &RTU{
 		SlaveID:  1,
 		Address:  "/dev",
-		Timeout:  5,
+		Timeout:  3 * time.Second,
 		BaudRate: 9600,
 		DataBits: 8,
 		Parity:   "N",
@@ -69,7 +69,7 @@ func (rtu *RTU) Close() error {
 type TCP struct {
 	Address string
 	SlaveID byte
-	Timeout time.Duration
+	Timeout time.Duration // nano sec
 	h       *modbus.TCPClientHandler
 	c       modbus.Client
 }
@@ -78,7 +78,7 @@ func NewTCP() *TCP {
 	return &TCP{
 		Address: "127.0.0.1:113",
 		SlaveID: 1,
-		Timeout: 5,
+		Timeout: 3 * time.Second,
 	}
 }
 
