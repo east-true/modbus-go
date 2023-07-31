@@ -31,6 +31,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package modbus_test
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -42,6 +43,29 @@ import (
 
 func TestTcpConnect(t *testing.T) {
 	mb := NewTCP(nil)
+	if err := mb.Connect(); err != nil {
+		t.Error(err)
+		return
+	} else {
+		t.Log("connted")
+	}
+
+	if err := mb.Close(); err != nil {
+		t.Error(err)
+		return
+	} else {
+		t.Log("close")
+	}
+}
+
+func TestCustomTcpConnect(t *testing.T) {
+	mem1 := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.BIG_LOWER, parser.INT16ARR, 1)
+	mem2 := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 10, parser.BIG_LOWER, parser.INT16ARR, 1)
+	mb := NewTCP(&client.TCP{
+		Address: "127.0.0.1:502",
+		SlaveID: 1,
+		Timeout: 30 * time.Second,
+	}, mem1, mem2)
 	if err := mb.Connect(); err != nil {
 		t.Error(err)
 		return
@@ -74,24 +98,16 @@ func TestTcpRead(t *testing.T) {
 	}
 }
 
-func TestCustomTcpRead(t *testing.T) {
-	mem1 := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.BIG_LOWER, parser.INT16ARR, 1)
-	mem2 := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 10, parser.BIG_LOWER, parser.INT16ARR, 1)
-	mb := NewTCP(&client.TCP{
-		Address: "127.0.0.1:502",
-		SlaveID: 1,
-		Timeout: 60 * time.Second,
-	}, mem1, mem2)
+func TestTcpWrite(t *testing.T) {
+	mem := memory.New(memory.FUNC_WRITE_REGISTER, 0, parser.BIG_LOWER, parser.INT16ARR, 1)
+	mb := NewTCP(nil, mem)
 	if err := mb.Connect(); err != nil {
 		t.Error(err)
 		return
 	} else {
-		t.Log("connted")
+		fmt.Println("connted")
 		defer mb.Close()
 	}
 
-	chunk := mb.Read()
-	for i := range chunk {
-		t.Logf("%+v", chunk[i])
-	}
+	mb.Write(0)
 }
