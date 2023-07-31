@@ -40,17 +40,53 @@ import (
 	"github.com/east-true/modbus-go/memory"
 )
 
-func TestTCP(t *testing.T) {
-	mem := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.LITTLE_LOWER, parser.INT16ARR, 1)
-	mb := NewTCP(&client.TCP{
-		Address: "192.168.1.122:502",
-		SlaveID: 1,
-		Timeout: 60 * time.Second,
-	}, mem)
+func TestTcpConnect(t *testing.T) {
+	mb := NewTCP(nil)
 	if err := mb.Connect(); err != nil {
 		t.Error(err)
 		return
 	} else {
+		t.Log("connted")
+	}
+
+	if err := mb.Close(); err != nil {
+		t.Error(err)
+		return
+	} else {
+		t.Log("close")
+	}
+}
+
+func TestTcpRead(t *testing.T) {
+	mem := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.BIG_LOWER, parser.INT16ARR, 1)
+	mb := NewTCP(nil, mem)
+	if err := mb.Connect(); err != nil {
+		t.Error(err)
+		return
+	} else {
+		t.Log("connted")
+		defer mb.Close()
+	}
+
+	chunk := mb.Read()
+	for i := range chunk {
+		t.Logf("%+v", chunk[i])
+	}
+}
+
+func TestCustomTcpRead(t *testing.T) {
+	mem1 := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.BIG_LOWER, parser.INT16ARR, 1)
+	mem2 := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 10, parser.BIG_LOWER, parser.INT16ARR, 1)
+	mb := NewTCP(&client.TCP{
+		Address: "127.0.0.1:502",
+		SlaveID: 1,
+		Timeout: 60 * time.Second,
+	}, mem1, mem2)
+	if err := mb.Connect(); err != nil {
+		t.Error(err)
+		return
+	} else {
+		t.Log("connted")
 		defer mb.Close()
 	}
 
