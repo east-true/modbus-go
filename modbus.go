@@ -15,7 +15,6 @@ type Modbus struct {
 	fns []memory.MemDelegate
 }
 
-// TODO : client fields editing
 func NewRTU(rtu *client.RTU, mems ...memory.MemDelegate) *Modbus {
 	if rtu == nil {
 		rtu = client.NewRTU()
@@ -46,18 +45,18 @@ func (mb *Modbus) Close() error {
 	return mb.c.Close()
 }
 
-func (mb *Modbus) Read() {
+func (mb *Modbus) Read() []*memory.MemReadData {
+	chunk := make([]*memory.MemReadData, len(mb.fns))
 	for i := range mb.fns {
 		if data, err := mb.fns[i].Read(mb.c.GetClient()); err != nil {
 			fmt.Println(err)
 			continue
 		} else {
-			for i := range data {
-				// TODO
-				fmt.Println(data[i])
-			}
+			chunk[i] = data
 		}
 	}
+
+	return chunk
 }
 
 func (mb *Modbus) Write(value ...uint16) {
