@@ -103,7 +103,7 @@ type TCP struct {
 
 func NewTCP() *TCP {
 	return &TCP{
-		Address: "127.0.0.1:113",
+		Address: "127.0.0.1:502",
 		SlaveID: 1,
 		Timeout: 3 * time.Second,
 	}
