@@ -1,7 +1,19 @@
 # modbus-go
 import : https://github.com/goburrow/modbus
 
+# Support Func
+- readCoils
+- readDiscreteInputs
+- readHoldingRegisters
+- readInputRegisters
+- writeCoil
+- writeRegister
+
+
 # Usage
+```go
+memory.New(func code, start address, "byte order", data type, count of parsed data type)
+```
 ```go
 mem := memory.New(memory.FUNC_READ_HOLDING_REGISTERS, 0, parser.BIG_LOWER, parser.INT16ARR, 1)
 mb := NewTCP(&client.TCP{
